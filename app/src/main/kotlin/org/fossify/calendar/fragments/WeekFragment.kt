@@ -205,7 +205,7 @@ class WeekFragment : Fragment(), WeeklyCalendar {
         val todayCode = Formatter.getDayCodeFromDateTime(DateTime())
         val screenWidth = context?.usableScreenSize?.x ?: return
         val dayWidth = screenWidth / config.weeklyViewDays
-        val useLongerDayLabels = dayWidth > res.getDimension(R.dimen.weekly_view_min_day_label)
+        val useLongerDayLabels = dayWidth > res.getDimension(R.dimen.fork_weekly_view_min_day_label)
 
         binding.weekLettersHolder.removeAllViews()
         for (i in 0 until config.weeklyViewDays) {

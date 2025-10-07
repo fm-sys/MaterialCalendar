@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="fork_weekly_view_min_day_label">50dp</dimen>
+</resources>
