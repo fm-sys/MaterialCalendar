@@ -6,6 +6,7 @@ import android.content.ClipDescription
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.util.Range
@@ -625,7 +626,10 @@ class WeekFragment : Fragment(), WeeklyCalendar {
                             textColor = textColor.adjustAlpha(HIGHER_ALPHA)
                         }
 
-                        root.background = ColorDrawable(backgroundColor)
+                        root.background = GradientDrawable().apply {
+                            cornerRadius = res.getDimension(R.dimen.fork_event_bg_corner_radius)
+                            setColor(backgroundColor)
+                        }
                         dayColumn.addView(root)
                         root.y = currentEventWeeklyView!!.range.lower * minuteHeight
 
@@ -779,7 +783,10 @@ class WeekFragment : Fragment(), WeeklyCalendar {
                 textColor = textColor.adjustAlpha(HIGHER_ALPHA)
             }
 
-            root.background = ColorDrawable(backgroundColor)
+            root.background = GradientDrawable().apply {
+                cornerRadius = res.getDimension(R.dimen.fork_event_bg_corner_radius)
+                setColor(backgroundColor)
+            }
 
             weekEventLabel.apply {
                 setTextColor(textColor)
