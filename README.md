@@ -11,6 +11,7 @@ That's what we changed:
 - gray out only month date but not events itself of next month in month view
 - make "Go to today" action bar position consistent
 - use abbreviations instead of single char weekday identifiers
+- round event corners consistently
 - to be continued...
 
 ---
