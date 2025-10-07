@@ -9,6 +9,7 @@ This app is a fork of [Fossify Calendar](https://github.com/FossifyOrg/Calendar)
 
 That's what we changed:
 - gray out only month date but not events itself of next month in month view
+- make "Go to today" action bar position consistent
 - to be continued...
 
 ---
