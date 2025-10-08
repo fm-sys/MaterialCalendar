@@ -779,7 +779,7 @@ class WeekFragment : Fragment(), WeeklyCalendar {
             }
 
             if (adjustAlpha) {
-                backgroundColor = backgroundColor.adjustAlpha(LOWER_ALPHA)
+                backgroundColor = backgroundColor.adjustAlpha(MEDIUM_ALPHA)
                 textColor = textColor.adjustAlpha(HIGHER_ALPHA)
             }
 
