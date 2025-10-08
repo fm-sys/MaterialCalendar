@@ -209,12 +209,10 @@ class MonthView(context: Context, attrs: AttributeSet, defStyle: Int) : View(con
                             textPaint.color = textColor
                         }
                     } else if (day.isToday && !isPrintVersion) {
-                        canvas.drawCircle(
-                            xPosCenter,
-                            textY - dayTextRect.height() / 2,
-                            textPaint.textSize * 0.8f,
-                            getCirclePaint(day)
-                        )
+                        val bgCenterY = textY - (dayTextRect.height() - smallPadding) / 2
+                        val bgHeight = textPaint.textSize * 1.1f
+                        bgRectF.set(xPosCenter - bgHeight, bgCenterY - bgHeight / 2, xPosCenter + bgHeight, bgCenterY + bgHeight / 2)
+                        canvas.drawRoundRect(bgRectF, bgHeight / 2, bgHeight / 2, getCirclePaint(day))
                     }
 
                     // mark days with a dot for each event
@@ -261,7 +259,7 @@ class MonthView(context: Context, attrs: AttributeSet, defStyle: Int) : View(con
                     }
 
                     canvas.drawText(dayNumber, xPosCenter, textY, textPaint)
-                    dayVerticalOffsets.put(day.indexOnMonthView, (verticalOffset + textPaint.textSize * 2).toInt())
+                    dayVerticalOffsets.put(day.indexOnMonthView, (verticalOffset + textPaint.textSize * 2 + smallPadding * 8).toInt())
                 }
                 curId++
             }
@@ -350,7 +348,7 @@ class MonthView(context: Context, attrs: AttributeSet, defStyle: Int) : View(con
         val bgLeft = xPos + smallPadding
         val bgTop = backgroundY + smallPadding - eventTitleHeight
         var bgRight = xPos - smallPadding + dayWidth * event.daysCnt
-        val bgBottom = backgroundY + smallPadding * 2
+        val bgBottom = backgroundY + smallPadding * 6
         if (bgRight > canvas.width.toFloat()) {
             bgRight = canvas.width.toFloat() - smallPadding
             val newStartDayIndex = (event.startDayIndex / 7 + 1) * 7
@@ -374,10 +372,10 @@ class MonthView(context: Context, attrs: AttributeSet, defStyle: Int) : View(con
             taskIconWidth += eventTitleHeight + smallPadding
         }
 
-        drawEventTitle(event, canvas, xPos + taskIconWidth, yPos + verticalOffset, bgRight - bgLeft - smallPadding - taskIconWidth, specificEventTitlePaint)
+        drawEventTitle(event, canvas, xPos + taskIconWidth + smallPadding * 4, yPos + verticalOffset + smallPadding, bgRight - bgLeft - smallPadding - taskIconWidth, specificEventTitlePaint)
 
         for (i in 0 until min(event.daysCnt, 7 - event.startDayIndex % 7)) {
-            dayVerticalOffsets.put(event.startDayIndex + i, verticalOffset + eventTitleHeight + smallPadding * 2)
+            dayVerticalOffsets.put(event.startDayIndex + i, verticalOffset + eventTitleHeight + smallPadding * 7)
         }
     }
 
