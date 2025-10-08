@@ -113,7 +113,6 @@ class SettingsActivity : SimpleActivity() {
         setupImportSettings()
 
         arrayOf(
-            binding.settingsColorCustomizationSectionLabel,
             binding.settingsGeneralSettingsLabel,
             binding.settingsRemindersLabel,
             binding.settingsCaldavLabel,
@@ -174,9 +173,7 @@ class SettingsActivity : SimpleActivity() {
     }
 
     private fun setupCustomizeColors() {
-        binding.settingsColorCustomizationHolder.setOnClickListener {
-            startCustomizationActivity()
-        }
+        // removed
     }
 
     private fun setupCustomizeNotifications() {

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Default values for theme -->
+    <color name="color_primary">@color/md_blue_700</color>
+    <color name="color_primary_dark">@color/md_blue_200_dark</color>
+</resources>

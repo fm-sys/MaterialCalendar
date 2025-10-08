@@ -11,6 +11,7 @@ import org.fossify.commons.helpers.BaseConfig
 import org.fossify.commons.helpers.DAY_MINUTES
 import org.fossify.commons.helpers.YEAR_SECONDS
 import java.util.Arrays
+import androidx.core.content.edit
 
 class Config(context: Context) : BaseConfig(context) {
     companion object {
@@ -34,7 +35,7 @@ class Config(context: Context) : BaseConfig(context) {
         set(midnightSpanning) = prefs.edit().putBoolean(SHOW_MIDNIGHT_SPANNING_EVENTS_AT_TOP, midnightSpanning).apply()
 
     var allowCustomizeDayCount: Boolean
-        get() = prefs.getBoolean(ALLOW_CUSTOMIZE_DAY_COUNT, true)
+        get() = prefs.getBoolean(ALLOW_CUSTOMIZE_DAY_COUNT, false)
         set(allow) = prefs.edit().putBoolean(ALLOW_CUSTOMIZE_DAY_COUNT, allow).apply()
 
     var vibrateOnReminder: Boolean
@@ -187,7 +188,7 @@ class Config(context: Context) : BaseConfig(context) {
         set(defaultReminder3) = prefs.edit().putInt(DEFAULT_REMINDER_3, defaultReminder3).apply()
 
     var pullToRefresh: Boolean
-        get() = prefs.getBoolean(PULL_TO_REFRESH, false)
+        get() = prefs.getBoolean(PULL_TO_REFRESH, true)
         set(pullToRefresh) = prefs.edit().putBoolean(PULL_TO_REFRESH, pullToRefresh).apply()
 
     var lastVibrateOnReminder: Boolean
@@ -199,7 +200,7 @@ class Config(context: Context) : BaseConfig(context) {
         set(defaultStartTime) = prefs.edit().putInt(DEFAULT_START_TIME, defaultStartTime).apply()
 
     var defaultDuration: Int
-        get() = prefs.getInt(DEFAULT_DURATION, 0)
+        get() = prefs.getInt(DEFAULT_DURATION, 60)
         set(defaultDuration) = prefs.edit().putInt(DEFAULT_DURATION, defaultDuration).apply()
 
     var defaultEventTypeId: Long
@@ -259,7 +260,7 @@ class Config(context: Context) : BaseConfig(context) {
         set(lastUsedEventSpan) = prefs.edit().putInt(LAST_USED_EVENT_SPAN, lastUsedEventSpan).apply()
 
     var allowCreatingTasks: Boolean
-        get() = prefs.getBoolean(ALLOW_CREATING_TASKS, true)
+        get() = prefs.getBoolean(ALLOW_CREATING_TASKS, false)
         set(allowCreatingTasks) = prefs.edit().putBoolean(ALLOW_CREATING_TASKS, allowCreatingTasks).apply()
 
     var wasFilteredOutWarningShown: Boolean

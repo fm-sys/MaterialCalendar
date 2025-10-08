@@ -57,10 +57,12 @@
         android:id="@+id/about"
         android:icon="@drawable/ic_info_vector"
         android:title="@string/about"
+        android:visible="false"
         app:showAsAction="never" />
     <item
         android:id="@+id/more_apps_from_us"
         android:icon="@drawable/ic_google_play_vector"
         android:title="@string/more_fossify_apps"
+        android:visible="false"
         app:showAsAction="never" />
 </menu>
