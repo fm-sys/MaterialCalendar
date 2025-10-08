@@ -12,6 +12,8 @@ That's what we changed:
 - make "Go to today" action bar position consistent
 - use abbreviations instead of single char weekday identifiers
 - round event corners consistently
+- changed some setting defaults as well as color scheme
+- hide some fossify specific UI elements
 - to be continued...
 
 ---
