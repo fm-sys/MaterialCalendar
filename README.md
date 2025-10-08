@@ -11,9 +11,10 @@ That's what we changed:
 - gray out only month date but not events itself of next month in month view
 - make "Go to today" action bar position consistent
 - use abbreviations instead of single char weekday identifiers
-- round event corners consistently
+- round event corners consistently and add proper text padding
 - changed some setting defaults as well as color scheme
 - hide some fossify specific UI elements
+- more compact "today" indicator
 - to be continued...
 
 ---
