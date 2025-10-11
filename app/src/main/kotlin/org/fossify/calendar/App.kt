@@ -13,5 +13,6 @@ class App : FossifyApp() {
         }
         baseConfig.isSystemThemeEnabled = true
         baseConfig.isGlobalThemeEnabled = false
+        baseConfig.hadThankYouInstalled = true
     }
 }
