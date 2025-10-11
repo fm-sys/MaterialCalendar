@@ -78,9 +78,6 @@ class WidgetMonthlyConfigureActivity : SimpleActivity(), MonthlyCalendar {
         updateBackgroundColor()
 
         mTextColor = config.widgetTextColor
-        if (mTextColor == resources.getColor(org.fossify.commons.R.color.default_widget_text_color) && isDynamicTheme()) {
-            mTextColor = resources.getColor(org.fossify.commons.R.color.you_primary_color, theme)
-        }
 
         updateTextColor()
 

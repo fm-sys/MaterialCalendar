@@ -5,7 +5,8 @@
     android:id="@+id/widget_header"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/medium_margin">
+    android:padding="@dimen/medium_margin"
+    android:paddingTop="@dimen/normal_margin">
 
     <TextClock
         android:id="@+id/widget_event_list_today"
@@ -16,7 +17,7 @@
         android:layout_toStartOf="@+id/widget_event_go_to_today"
         android:ellipsize="end"
         android:format12Hour="MMM d yyyy (EEEE)"
-        android:format24Hour="MMM d yyyy (EEEE)"
+        android:format24Hour="EEEE, d. MMM yyyy"
         android:gravity="center_vertical"
         android:includeFontPadding="false"
         android:maxLines="1"

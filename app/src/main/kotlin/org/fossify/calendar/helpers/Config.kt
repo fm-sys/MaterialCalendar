@@ -78,7 +78,7 @@ class Config(context: Context) : BaseConfig(context) {
         set(lastEventReminderMinutes3) = prefs.edit().putInt(LAST_EVENT_REMINDER_MINUTES_3, lastEventReminderMinutes3).apply()
 
     var displayPastEvents: Int
-        get() = prefs.getInt(DISPLAY_PAST_EVENTS, DAY_MINUTES)
+        get() = prefs.getInt(DISPLAY_PAST_EVENTS, 0)
         set(displayPastEvents) = prefs.edit().putInt(DISPLAY_PAST_EVENTS, displayPastEvents).apply()
 
     var displayEventTypes: Set<String>

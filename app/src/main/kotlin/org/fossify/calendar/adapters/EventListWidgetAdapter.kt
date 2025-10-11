@@ -1,8 +1,14 @@
 package org.fossify.calendar.adapters
 
+import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.RectF
+import android.graphics.Typeface
 import android.provider.CalendarContract
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
@@ -13,6 +19,7 @@ import org.fossify.calendar.models.*
 import org.fossify.commons.extensions.*
 import org.fossify.commons.helpers.MEDIUM_ALPHA
 import org.joda.time.DateTime
+import androidx.core.graphics.createBitmap
 
 class EventListWidgetAdapter(val context: Context, val intent: Intent) : RemoteViewsService.RemoteViewsFactory {
     private val ITEM_EVENT = 0
@@ -30,6 +37,7 @@ class EventListWidgetAdapter(val context: Context, val intent: Intent) : RemoteV
     private var mediumFontSize = context.getWidgetFontSize()
     private var smallMargin = context.resources.getDimension(org.fossify.commons.R.dimen.small_margin).toInt()
     private var normalMargin = context.resources.getDimension(org.fossify.commons.R.dimen.normal_margin).toInt()
+    private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
 
     init {
         initConfigValues()
@@ -72,10 +80,10 @@ class EventListWidgetAdapter(val context: Context, val intent: Intent) : RemoteV
     }
 
     private fun setupListEvent(remoteView: RemoteViews, item: ListEvent) {
-        var curTextColor = textColor
         remoteView.apply {
-            setBackgroundColor(R.id.event_item_color_bar, item.color)
-            setText(R.id.event_item_title, item.title)
+
+            /*setBackgroundColor(R.id.event_item_holder, item.color)
+            setText(R.id.event_item_title, item.title)*/
 
             var timeText = if (item.isAllDay) allDayString else Formatter.getTimeFromTS(context, item.startTS)
             val endText = Formatter.getTimeFromTS(context, item.endTS)
@@ -87,17 +95,30 @@ class EventListWidgetAdapter(val context: Context, val intent: Intent) : RemoteV
                 val startCode = Formatter.getDayCodeFromTS(item.startTS)
                 val endCode = Formatter.getDayCodeFromTS(item.endTS)
                 if (startCode != endCode) {
-                    timeText += " (${Formatter.getDateDayTitle(endCode)})"
+                    timeText += " (bis ${Formatter.getDateDayTitle(endCode)})"
                 }
             }
-
-            setText(R.id.event_item_time, timeText)
 
             // we cannot change the event_item_color_bar rules dynamically, so do it like this
             val descriptionText = if (replaceDescription) item.location else item.description.replace("\n", " ")
             if (displayDescription && descriptionText.isNotEmpty()) {
-                setText(R.id.event_item_time, "$timeText\n$descriptionText")
+                timeText += " $descriptionText"
             }
+
+            val widthPx = estimateWidgetWidth(context, appWidgetId)
+
+            val cardBitmap = renderEventCard(
+                context,
+                title = item.title,
+                time = timeText,
+                bgColor = item.color,
+                widthPx = widthPx
+            )
+            setImageViewBitmap(R.id.event_card_image, cardBitmap)
+
+            /*setText(R.id.event_item_time, timeText)
+
+
 
             if (item.isTask && item.isTaskCompleted && dimCompletedTasks || dimPastEvents && item.isPastEvent && !item.isTask) {
                 curTextColor = weakTextColor
@@ -122,7 +143,7 @@ class EventListWidgetAdapter(val context: Context, val intent: Intent) : RemoteV
                 setInt(R.id.event_item_title, "setPaintFlags", Paint.ANTI_ALIAS_FLAG or Paint.STRIKE_THRU_TEXT_FLAG)
             } else {
                 setInt(R.id.event_item_title, "setPaintFlags", Paint.ANTI_ALIAS_FLAG)
-            }
+            }*/
 
             Intent().apply {
                 putExtra(EVENT_ID, item.id)
@@ -132,6 +153,52 @@ class EventListWidgetAdapter(val context: Context, val intent: Intent) : RemoteV
             }
         }
     }
+
+    fun estimateWidgetWidth(context: Context, appWidgetId: Int): Int {
+        val appWidgetManager = AppWidgetManager.getInstance(context)
+        val options = appWidgetManager.getAppWidgetOptions(appWidgetId)
+        val displayMetrics = context.resources.displayMetrics
+        val widthDp = options?.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH) ?: 300
+        return (widthDp * displayMetrics.density).toInt().coerceAtMost(800)
+    }
+
+    fun renderEventCard(
+        context: Context,
+        title: String,
+        time: String,
+        bgColor: Int,
+        widthPx: Int = 600,
+        cornerRadiusDp: Float = 12f
+    ): Bitmap {
+        val density = context.resources.displayMetrics.density
+        val cornerRadiusPx = cornerRadiusDp * density
+        val heightPx = (50 * density).toInt() // ~90dp tall card
+
+        val bitmap = createBitmap(widthPx, heightPx)
+        val canvas = Canvas(bitmap)
+
+        val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = bgColor }
+
+        val rect = RectF(0f, 0f, widthPx.toFloat(), heightPx.toFloat())
+        canvas.drawRoundRect(rect, cornerRadiusPx, cornerRadiusPx, bgPaint)
+
+        val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = bgColor.getContrastColor()
+            textSize = 16 * density
+            typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+        }
+
+        canvas.drawText(title, 10 * density, 20 * density, textPaint)
+
+        textPaint.apply {
+            textSize = 14 * density
+            typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+        }
+        canvas.drawText(time, 10 * density, 40 * density, textPaint)
+
+        return bitmap
+    }
+
 
     private fun setupListSectionDay(remoteView: RemoteViews, item: ListSectionDay) {
         var curTextColor = textColor
@@ -171,7 +238,9 @@ class EventListWidgetAdapter(val context: Context, val intent: Intent) : RemoteV
 
     override fun getViewTypeCount() = 3
 
-    override fun onCreate() {}
+    override fun onCreate() {
+        appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
+    }
 
     override fun getItemId(position: Int) = position.toLong()
 
@@ -210,11 +279,11 @@ class EventListWidgetAdapter(val context: Context, val intent: Intent) : RemoteV
             sorted.forEach { event ->
                 val code = Formatter.getDayCodeFromTS(event.startTS)
                 val monthLabel = Formatter.getLongMonthYear(context, code)
-                if (monthLabel != prevMonthLabel) {
-                    val listSectionMonth = ListSectionMonth(monthLabel)
-                    listItems.add(listSectionMonth)
-                    prevMonthLabel = monthLabel
-                }
+//                if (monthLabel != prevMonthLabel) {
+//                    val listSectionMonth = ListSectionMonth(monthLabel)
+//                    listItems.add(listSectionMonth)
+//                    prevMonthLabel = monthLabel
+//                }
 
                 if (code != prevCode) {
                     val day = Formatter.getDateDayTitle(code)

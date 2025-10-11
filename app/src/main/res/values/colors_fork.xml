@@ -3,4 +3,5 @@
     <!-- Default values for theme -->
     <color name="color_primary">@color/md_blue_700</color>
     <color name="color_primary_dark">@color/md_blue_200_dark</color>
+    <color name="default_widget_text_color">@color/white</color>
 </resources>

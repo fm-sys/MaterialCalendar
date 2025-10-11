@@ -70,6 +70,7 @@ class MyWidgetListProvider : AppWidgetProvider() {
 
                 Intent(context, WidgetService::class.java).apply {
                     putExtra(EVENT_LIST_PERIOD, widget?.period)
+                    putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, it)
                     data = Uri.parse(this.toUri(Intent.URI_INTENT_SCHEME))
                     views.setRemoteAdapter(R.id.widget_event_list, this)
                 }
