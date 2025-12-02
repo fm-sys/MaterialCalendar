@@ -5,8 +5,33 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.8.1] - 2025-11-09
+### Changed
+- Updated holiday data
+- Updated translations
+
+### Fixed
+- Fixed startup crash in weekly view ([#550])
+- Fixed incorrect weekly view start date in some cases ([#45])
+- Fixed issue with Up/Arrow button closing the app ([#870])
+- Fixed time drift when switching between views ([#590])
+
+## [1.8.0] - 2025-10-29
+### Changed
+- Compatibility updates for Android 15 & 16
+- Removed permission to access network state (it was added accidentally) ([#826])
+- Updated holiday data
+- Updated translations
+
+## [1.7.0] - 2025-10-16
 ### Changed
 - Events shown in adjacent months are no longer dimmed ([#808])
+- Updated translations
+
+### Fixed
+- Fixed missing email notifications for attendees in some cases ([#135])
+- Fixed missing attendees list when using some specific providers ([#818])
 
 ## [1.6.2] - 2025-10-09
 ### Changed
@@ -134,7 +159,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Initial release
 
 [#34]: https://github.com/FossifyOrg/Calendar/issues/34
+[#45]: https://github.com/FossifyOrg/Calendar/issues/45
 [#49]: https://github.com/FossifyOrg/Calendar/issues/49
+[#135]: https://github.com/FossifyOrg/Calendar/issues/135
 [#138]: https://github.com/FossifyOrg/Calendar/issues/138
 [#148]: https://github.com/FossifyOrg/Calendar/issues/148
 [#196]: https://github.com/FossifyOrg/Calendar/issues/196
@@ -144,9 +171,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#394]: https://github.com/FossifyOrg/Calendar/issues/394
 [#484]: https://github.com/FossifyOrg/Calendar/issues/484
 [#486]: https://github.com/FossifyOrg/Calendar/issues/486
+[#550]: https://github.com/FossifyOrg/Calendar/issues/550
 [#551]: https://github.com/FossifyOrg/Calendar/issues/551
 [#567]: https://github.com/FossifyOrg/Calendar/issues/567
 [#574]: https://github.com/FossifyOrg/Calendar/issues/574
+[#590]: https://github.com/FossifyOrg/Calendar/issues/590
 [#603]: https://github.com/FossifyOrg/Calendar/issues/603
 [#613]: https://github.com/FossifyOrg/Calendar/issues/613
 [#641]: https://github.com/FossifyOrg/Calendar/issues/641
@@ -156,8 +185,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#732]: https://github.com/FossifyOrg/Calendar/issues/732
 [#761]: https://github.com/FossifyOrg/Calendar/issues/761
 [#808]: https://github.com/FossifyOrg/Calendar/issues/808
+[#818]: https://github.com/FossifyOrg/Calendar/issues/818
+[#826]: https://github.com/FossifyOrg/Calendar/issues/826
+[#870]: https://github.com/FossifyOrg/Calendar/issues/870
 
-[Unreleased]: https://github.com/FossifyOrg/Calendar/compare/1.6.2...HEAD
+[Unreleased]: https://github.com/FossifyOrg/Calendar/compare/1.8.1...HEAD
+[1.8.1]: https://github.com/FossifyOrg/Calendar/compare/1.8.0...1.8.1
+[1.8.0]: https://github.com/FossifyOrg/Calendar/compare/1.7.0...1.8.0
+[1.7.0]: https://github.com/FossifyOrg/Calendar/compare/1.6.2...1.7.0
 [1.6.2]: https://github.com/FossifyOrg/Calendar/compare/1.6.1...1.6.2
 [1.6.1]: https://github.com/FossifyOrg/Calendar/compare/1.6.0...1.6.1
 [1.6.0]: https://github.com/FossifyOrg/Calendar/compare/1.5.0...1.6.0

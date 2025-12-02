@@ -1,26 +1,26 @@
 [versions]
 #jetbrains
-kotlin = "2.2.20"
+kotlin = "2.2.21"
 #KSP
-ksp = "2.2.20-2.0.3"
+ksp = "2.3.3"
 #Detekt
 detekt = "1.23.8"
-detektCompose = "0.4.27"
+detektCompose = "0.4.28"
 #Androidx
 multidex = "2.0.1"
 print = "1.1.0"
 constraintlayout = "2.2.1"
 swiperefreshlayout = "1.1.0"
-work = "2.9.1"
+work = "2.11.0"
 #Room
-room = "2.8.1"
+room = "2.8.4"
 #Fossify
-commons = "5.3.0"
+commons = "5.9.1"
 #Gradle
 gradlePlugins-agp = "8.11.1"
 #build
-app-build-compileSDKVersion = "34"
-app-build-targetSDK = "34"
+app-build-compileSDKVersion = "36"
+app-build-targetSDK = "36"
 app-build-minimumSDK = "26"
 app-build-javaVersion = "VERSION_17"
 app-build-kotlinJVMTarget = "17"

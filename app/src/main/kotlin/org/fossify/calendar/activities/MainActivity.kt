@@ -51,6 +51,7 @@ import org.fossify.calendar.helpers.FETCH_INTERVAL
 import org.fossify.calendar.helpers.FLAG_ALL_DAY
 import org.fossify.calendar.helpers.FLAG_MISSING_YEAR
 import org.fossify.calendar.helpers.Formatter
+import org.fossify.calendar.helpers.Formatter.DAYCODE_PATTERN
 import org.fossify.calendar.helpers.HOLIDAY_EVENT
 import org.fossify.calendar.helpers.HolidayHelper
 import org.fossify.calendar.helpers.INITIAL_EVENTS
@@ -139,6 +140,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
+    override var isSearchBarEnabled = true
 
     private var showCalDAVRefreshToast = false
     private var mShouldFilterBeVisible = false
@@ -174,7 +176,9 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         appLaunched(org.fossify.calendar.BuildConfig.APPLICATION_ID)
         setupOptionsMenu()
         refreshMenuItems()
-        updateMaterialActivityViews(binding.mainCoordinator, binding.mainHolder, useTransparentNavigation = false, useTopSearchMenu = true)
+        setupEdgeToEdge(
+            padBottomImeAndSystem = listOf(binding.searchHolder, binding.quickEventTypeFilter),
+        )
 
         checkWhatsNewDialog()
         binding.calendarFab.beVisibleIf(config.storedView != YEARLY_VIEW && config.storedView != WEEKLY_VIEW)
@@ -268,7 +272,6 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             }
         }
 
-        updateStatusbarColor(getProperBackgroundColor())
         binding.apply {
             mainMenu.updateColors()
             storeStateVariables()
@@ -316,7 +319,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         }
 
         shouldGoToTodayBeVisible = currentFragments.lastOrNull()?.shouldGoToTodayBeVisible() ?: false
-        binding.mainMenu.getToolbar().menu.apply {
+        binding.mainMenu.requireToolbar().menu.apply {
             goToTodayButton = findItem(R.id.go_to_today)
             findItem(R.id.print).isVisible = config.storedView != MONTHLY_DAILY_VIEW
             findItem(R.id.filter).isVisible = mShouldFilterBeVisible
@@ -328,7 +331,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     }
 
     private fun setupOptionsMenu() = binding.apply {
-        mainMenu.getToolbar().inflateMenu(R.menu.menu_main)
+        mainMenu.requireToolbar().inflateMenu(R.menu.menu_main)
         mainMenu.toggleHideOnScroll(false)
         mainMenu.setupMenu()
 
@@ -336,7 +339,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
             searchQueryChanged(text)
         }
 
-        mainMenu.getToolbar().setOnMenuItemClickListener { menuItem ->
+        mainMenu.requireToolbar().setOnMenuItemClickListener { menuItem ->
             if (fabExtendedOverlay.isVisible()) {
                 hideExtendedFab()
             }
@@ -360,16 +363,23 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
         }
     }
 
-    override fun onBackPressed() {
-        if (binding.mainMenu.isSearchOpen) {
+    override fun onBackPressedCompat(): Boolean {
+        return if (binding.mainMenu.isSearchOpen) {
             closeSearch()
+            true
         } else {
             binding.swipeRefreshLayout.isRefreshing = false
             checkSwipeRefreshAvailability()
             when {
-                binding.fabExtendedOverlay.isVisible() -> hideExtendedFab()
-                currentFragments.size > 1 -> removeTopFragment()
-                else -> super.onBackPressed()
+                binding.fabExtendedOverlay.isVisible() -> {
+                    hideExtendedFab()
+                    true
+                }
+                currentFragments.size > 1 -> {
+                    removeTopFragment()
+                    true
+                }
+                else -> false
             }
         }
     }
@@ -1038,8 +1048,14 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     }
 
     private fun fixDayCode(dayCode: String? = null): String? = when {
-        config.storedView == WEEKLY_VIEW && (dayCode?.length == Formatter.DAYCODE_PATTERN.length) -> getFirstDayOfWeek(Formatter.getDateTimeFromCode(dayCode))
-        config.storedView == YEARLY_VIEW && (dayCode?.length == Formatter.DAYCODE_PATTERN.length) -> Formatter.getYearFromDayCode(dayCode)
+        config.storedView == WEEKLY_VIEW && (dayCode?.length == DAYCODE_PATTERN.length) -> {
+            getFirstDayOfWeek(Formatter.getLocalDateTimeFromCode(dayCode))
+        }
+
+        config.storedView == YEARLY_VIEW && (dayCode?.length == DAYCODE_PATTERN.length) -> {
+            Formatter.getYearFromDayCode(dayCode)
+        }
+
         else -> dayCode
     }
 
@@ -1165,7 +1181,7 @@ class MainActivity : SimpleActivity(), RefreshRecyclerViewListener {
     private fun showBackNavigationArrow() {
         binding.mainMenu.toggleForceArrowBackIcon(true)
         binding.mainMenu.onNavigateBackClickListener = {
-            onBackPressed()
+            onBackPressedCompat()
         }
     }
 

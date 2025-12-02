@@ -213,7 +213,6 @@ class EventActivity : SimpleActivity() {
     private val binding by viewBinding(ActivityEventBinding::inflate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        isMaterialActivity = true
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setupOptionsMenu()
@@ -223,13 +222,8 @@ class EventActivity : SimpleActivity() {
             return
         }
 
-        updateMaterialActivityViews(
-            mainCoordinatorLayout = binding.eventCoordinator,
-            nestedView = binding.eventHolder,
-            useTransparentNavigation = true,
-            useTopSearchMenu = false
-        )
-        setupMaterialScrollListener(binding.eventNestedScrollview, binding.eventToolbar)
+        setupEdgeToEdge(padBottomImeAndSystem = listOf(binding.eventNestedScrollview))
+        setupMaterialScrollListener(binding.eventNestedScrollview, binding.eventAppbar)
 
         val intent = intent ?: return
         mWasContactsPermissionChecked = hasPermission(PERMISSION_READ_CONTACTS)
@@ -256,11 +250,11 @@ class EventActivity : SimpleActivity() {
 
     override fun onResume() {
         super.onResume()
-        setupToolbar()
+        setupTopAppBar()
     }
 
-    private fun setupToolbar() {
-        setupToolbar(binding.eventToolbar, NavigationIcon.Arrow)
+    private fun setupTopAppBar() {
+        setupTopAppBar(binding.eventAppbar, NavigationIcon.Arrow)
         binding.eventToolbar.setNavigationOnClickListener {
             maybeShowUnsavedChangesDialog {
                 hideKeyboard()
@@ -269,10 +263,11 @@ class EventActivity : SimpleActivity() {
         }
     }
 
-    override fun onBackPressed() {
+    override fun onBackPressedCompat(): Boolean {
         maybeShowUnsavedChangesDialog {
-            super.onBackPressed()
+            performDefaultBack()
         }
+        return true
     }
 
     private fun maybeShowUnsavedChangesDialog(discard: () -> Unit) {
@@ -2131,7 +2126,7 @@ class EventActivity : SimpleActivity() {
         val currentCalendar =
             calDAVHelper.getCalDAVCalendars("", true).firstOrNull { it.id == mEventCalendarId }
         mAttendees.forEach {
-            it.isMe = it.email == currentCalendar?.ownerName
+            it.isMe = it.email != "" && it.email == currentCalendar?.ownerName
         }
 
         mAttendees.sortWith(
@@ -2361,12 +2356,27 @@ class EventActivity : SimpleActivity() {
         if (mEvent.id == null && isSavingEvent && attendees.isNotEmpty()) {
             val currentCalendar =
                 calDAVHelper.getCalDAVCalendars("", true).firstOrNull { it.id == mEventCalendarId }
-            mAvailableContacts.firstOrNull { it.email == currentCalendar?.ownerName }?.apply {
-                attendees = attendees.filter { it.email != currentCalendar?.ownerName }
-                    .toMutableList() as ArrayList<Attendee>
-                status = Attendees.ATTENDEE_STATUS_ACCEPTED
-                relationship = Attendees.RELATIONSHIP_ORGANIZER
-                attendees.add(this)
+            val organizerEmail = currentCalendar?.ownerName
+            val organizer = mAvailableContacts.firstOrNull { it.email.equals(organizerEmail, true) }
+            attendees = attendees
+                .filter { !it.email.equals(organizerEmail, true) }
+                .toMutableList() as ArrayList<Attendee>
+            if (organizer != null) {
+                organizer.status = Attendees.ATTENDEE_STATUS_ACCEPTED
+                organizer.relationship = Attendees.RELATIONSHIP_ORGANIZER
+                attendees.add(organizer)
+            } else if (!organizerEmail.isNullOrBlank()) {
+                attendees.add(
+                    Attendee(
+                        contactId = 0,
+                        name = "",
+                        email = organizerEmail,
+                        status = Attendees.ATTENDEE_STATUS_ACCEPTED,
+                        photoUri = "",
+                        isMe = true,
+                        relationship = Attendees.RELATIONSHIP_ORGANIZER
+                    )
+                )
             }
         }
 
