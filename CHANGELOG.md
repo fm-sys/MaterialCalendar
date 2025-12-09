@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- Use weekday abbreviations instead of single char weekday identifiers ([#103])
+- Converting all-day events to timed events now respects default start time and duration ([#917])
+
+### Fixed
+- Fixed crashes and freezing affecting some devices ([#889])
 
 ## [1.8.1] - 2025-11-09
 ### Changed
@@ -161,6 +167,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#34]: https://github.com/FossifyOrg/Calendar/issues/34
 [#45]: https://github.com/FossifyOrg/Calendar/issues/45
 [#49]: https://github.com/FossifyOrg/Calendar/issues/49
+[#103]: https://github.com/FossifyOrg/Calendar/issues/103
 [#135]: https://github.com/FossifyOrg/Calendar/issues/135
 [#138]: https://github.com/FossifyOrg/Calendar/issues/138
 [#148]: https://github.com/FossifyOrg/Calendar/issues/148
@@ -188,6 +195,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [#818]: https://github.com/FossifyOrg/Calendar/issues/818
 [#826]: https://github.com/FossifyOrg/Calendar/issues/826
 [#870]: https://github.com/FossifyOrg/Calendar/issues/870
+[#889]: https://github.com/FossifyOrg/Calendar/issues/889
+[#917]: https://github.com/FossifyOrg/Calendar/issues/917
 
 [Unreleased]: https://github.com/FossifyOrg/Calendar/compare/1.8.1...HEAD
 [1.8.1]: https://github.com/FossifyOrg/Calendar/compare/1.8.0...1.8.1
